@@ -1,7 +1,8 @@
 #include<cstdio>
 #include<iostream>
 #include<vector>
-#include<ctime>
+#include<windows.h>
+//#include<ctime>
 using namespace std;
 
 #define LOCAL
@@ -49,21 +50,37 @@ struct BigInteger{
 
 	BigInteger operator * (const BigInteger& b) const
 	{
-		BigInteger c, tmp;
+		BigInteger c;
 		c.s.clear();
-		for (int i = 0; i < s.size(); i++)
-		{
-			for (int j = 0; j < b.s.size(); j++)
-			{
-				long long x = s[i] * b.s[j];
-				tmp.s.clear();
-				for (int k = 0; k < i + j; k++)
-				{
-					tmp.s.push_back(0);
+		for (int i = 0;; i++) {
+			if (i >= s.size()) {
+				break;
+			}
+			int x = 0;
+			long long g = 0;
+			if (i < s.size()) {
+				x = s[i];
+			}
+			g = x;
+			for (int j = 0, r = 0; j<b.s.size(); j++) {
+				int k = i + j;
+				g = x;
+				g *= b.s[j];
+				while (g) {
+					if (k < c.s.size()) {
+						c.s[k] = c.s[k] + g % BASE;
+						if (c.s[k] / BASE) {
+							r = c.s[k] / BASE;
+							c.s[k] = c.s[k] % BASE;
+						}
+					}
+					else {
+						c.s.push_back(g%BASE);
+					}
+					g = g / BASE + r;
+					r = 0;
+					k++;
 				}
-				if (x % BASE != 0) tmp.s.push_back(x % BASE);
-				if (x / BASE != 0) tmp.s.push_back(x / BASE);
-				c += tmp;
 			}
 		}
 		return c;
@@ -128,23 +145,29 @@ int main()
 	freopen("fib_matrix.txt", "w", stdout);
 #endif
 	int n = 0;
-	double t_start = 0.0, t_end = 0.0;
+	//double t_start = 0.0, t_end = 0.0;
+	LARGE_INTEGER n_freq;
+	LARGE_INTEGER n_begin_time, n_end_time;
 	BigInteger rlt = 0;
 
 	//printf("Fibonacci matrix multiplication method\n");
 	printf("matrix multiplication\n");
 	//printf("please input n: ");
-
+	QueryPerformanceFrequency(&n_freq);
 	while (scanf("%d", &n) == 1)
 	{
 
-		t_start = (double)clock();
+		//t_start = (double)clock();
+		QueryPerformanceCounter(&n_begin_time);
 
 		rlt = fibonacci(n);
 
-		t_end = (double)clock();
+		//t_end = (double)clock();
+		QueryPerformanceCounter(&n_end_time);
 
-		cout << "n: " << n << " rlt: " << rlt << "\ntime:" << (t_end - t_start) / CLOCKS_PER_SEC << " s" << endl;
+		//cout << "n: " << n << " rlt: " << rlt << "\ntime:" << (t_end - t_start) / CLOCKS_PER_SEC << " s" << endl;
+		cout << "n: " << n << " rlt: " << rlt << "\ntime:" <<
+			(double)(n_end_time.QuadPart - n_begin_time.QuadPart) / (double)n_freq.QuadPart << " us" << endl;
 		//printf("input: %d\n", n);
 		//printf("result: %lld\n", fibonacci(n));
 		//printf("time: %lf us\n", (double)(n_end_time.QuadPart - n_begin_time.QuadPart) / (double)n_freq.QuadPart); printf("input: %d\n", n);

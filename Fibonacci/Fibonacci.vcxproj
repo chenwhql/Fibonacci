@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Fibonacci_matrix_big_integer.cpp" />
+    <ClCompile Include="Fibonacci_interative_big_integer.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7A87992D-D791-4DDE-AF12-8C95BDF1D8E7}</ProjectGuid>

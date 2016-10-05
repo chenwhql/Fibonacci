@@ -1,7 +1,8 @@
 #include<cstdio>
 #include<iostream>
 #include<vector>
-#include<ctime>
+#include<windows.h>
+//#include<ctime>
 using namespace std;
 
 #define LOCAL
@@ -88,21 +89,28 @@ int main()
 	freopen("fib_iter.txt","w",stdout);
 #endif
 	int n = 0;
-	double t_start = 0.0, t_end = 0.0;
+	//double t_start = 0.0, t_end = 0.0;
+	LARGE_INTEGER n_freq;
+	LARGE_INTEGER n_begin_time, n_end_time;
 	BigInteger rlt = 0;
 
 	//printf("Fibonacci iterative method\n");
 	printf("iterative method\n");
 	//printf("please input n: ");
+	QueryPerformanceFrequency(&n_freq);
 	while (scanf("%d", &n) == 1)
 	{
-		t_start = (double)clock();
+		//t_start = (double)clock();
+		QueryPerformanceCounter(&n_begin_time);
 
 		rlt = fibonacci(n);
 
-		t_end = (double)clock();
+		//t_end = (double)clock();
+		QueryPerformanceCounter(&n_end_time);
 
-		cout << "n: " << n << " rlt: " << rlt << "\ntime:" << (t_end - t_start) / CLOCKS_PER_SEC << " s" << endl;
+		//cout << "n: " << n << " rlt: " << rlt << "\ntime:" << (t_end - t_start) / CLOCKS_PER_SEC << " s" << endl;
+		cout << "n: " << n << " rlt: " << rlt << "\ntime:" << 
+			(double)(n_end_time.QuadPart - n_begin_time.QuadPart) / (double)n_freq.QuadPart << " us" << endl;
 		/*printf("input: %d\n", n);
 		printf("result: %lld\n", fibonacci(n));
 		printf("time: %lf us\n", (double)(n_end_time.QuadPart - n_begin_time.QuadPart) / (double)n_freq.QuadPart);*/

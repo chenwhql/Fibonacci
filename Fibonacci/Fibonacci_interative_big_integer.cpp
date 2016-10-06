@@ -41,12 +41,6 @@ struct BigInteger{
 		}
 		return c;
 	}
-
-	BigInteger operator += (const BigInteger& b)
-	{
-		*this = *this + b;
-		return *this;
-	}
 };
 
 ostream& operator << (ostream& out, const BigInteger& x)
@@ -111,6 +105,7 @@ int main()
 		//cout << "n: " << n << " rlt: " << rlt << "\ntime:" << (t_end - t_start) / CLOCKS_PER_SEC << " s" << endl;
 		cout << "n: " << n << " rlt: " << rlt << "\ntime:" << 
 			(double)(n_end_time.QuadPart - n_begin_time.QuadPart) / (double)n_freq.QuadPart << " us" << endl;
+		//cout << (double)(n_end_time.QuadPart - n_begin_time.QuadPart) / (double)n_freq.QuadPart << endl;
 		/*printf("input: %d\n", n);
 		printf("result: %lld\n", fibonacci(n));
 		printf("time: %lf us\n", (double)(n_end_time.QuadPart - n_begin_time.QuadPart) / (double)n_freq.QuadPart);*/
